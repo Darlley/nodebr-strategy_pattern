@@ -84,6 +84,11 @@ class PostgreSQL extends ICrud {
     console.log('result', result)
     return result
   }
+
+  async delete(id) {
+    const query = id ? { id } : {}
+    return await this._herois.destroy({ where: query })
+  }
 }
 
 module.exports = PostgreSQL

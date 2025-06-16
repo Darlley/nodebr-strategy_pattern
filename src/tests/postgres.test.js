@@ -10,6 +10,10 @@ describe("Postgres Strategy", function () {
 
   this.timeout(Infinity)
 
+  this.beforeAll(async function() {
+    await context.delete()
+  })
+
   it("Conectar", async function() {
     const result = await context.isConnected()
     assert.equal(result, true)
@@ -43,7 +47,15 @@ describe("Postgres Strategy", function () {
 
     assert.deepEqual(result, 1)
     assert.deepEqual(itemAtualizado, MOCK_HEROI_ATUALIZADO)
+  })
 
+  it("Remover", async function() {
+    const [itemDeletar] = await context.read({})
 
+    const result = await context.delete(itemDeletar.id)    
+    assert.deepEqual(result, 1)
+
+    const itemDeletado = await context.read({ id: itemDeletar.id })
+    assert.deepEqual(itemDeletado, [])
   })
 })
